@@ -1,12 +1,33 @@
 syntax = "proto3";
 
-package user; // ganti nama package nya juga
+package user;
+
+import "proto/google/api/annotations.proto";
+import "proto/protoc-gen-openapiv2/options/annotations.proto";
 
 
 option go_package = "grpc-rest-gateway-1/protogen/user";
 
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {
+    title: "rest api - user";
+    version: "1.0.0";
+  };
+  host: "localhost:8081";
+  schemes: HTTP;
+  produces: "application/json";
+};
+
 message UserRequest { 
-  string id = 1 [json_name = "id"];
+  string id = 1 
+  [
+    json_name = "id",
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+      description: "uuid",
+      format: "string",
+      example: "c7a5b0b8-6c5e-4d62-b9e3-f7b6d0628f6a",
+    }
+  ];
   string name = 2 [json_name = "name"];
   string occupation = 3 [json_name = "occupation"];
   string email = 4 [json_name = "email"];
@@ -30,5 +51,25 @@ message UserResponse {
 }
 
 service UserService {
-  rpc GetUser(UserRequest) returns (UserResponse) {}
+  rpc GetUser(UserRequest) returns (UserResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/user/get/{id}"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Endpoint untuk get user bedasarkan id",
+      description: "Masukkan uuid yang valid",
+      responses: {
+        key: "200";
+        value: {
+          description: "contoh response, 200 ketika ..."
+        }
+      }
+      responses: {
+        key: "400";
+        value: {
+          description: "contoh response, 400 ketika ..."
+        }
+      }
+    };
+  }
 }
