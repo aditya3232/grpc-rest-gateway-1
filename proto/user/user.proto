@@ -38,26 +38,50 @@ message UserRequest {
   string updated_at = 9 [json_name = "updated_at"];
 }
 
-message UserResponse { 
+message UserData { 
   string id = 1 [json_name = "id"];
   string name = 2 [json_name = "name"];
   string occupation = 3 [json_name = "occupation"];
   string email = 4 [json_name = "email"];
-  string password_hash = 5 [json_name = "password_hash"];
-  string avatar_file_name = 6 [json_name = "avatar_file_name"];
-  string role = 7 [json_name = "role"];
-  string created_at = 8 [json_name = "created_at"];
-  string updated_at = 9 [json_name = "updated_at"];
+  string role = 5 [json_name = "role"];
+  string created_at = 6 [json_name = "created_at"];
+  string updated_at = 7 [json_name = "updated_at"];
+}
+
+message UserResponse {
+  UserData data = 1 [json_name = "data"];
 }
 
 service UserService {
   rpc GetUser(UserRequest) returns (UserResponse) {
     option (google.api.http) = {
-      get: "/api/v1/user/get/{id}"
+      get: "/api/v1/user/{id}"
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
       summary: "Endpoint untuk get user bedasarkan id",
       description: "Masukkan uuid yang valid",
+      responses: {
+        key: "200";
+        value: {
+          description: "contoh response, 200 ketika ..."
+        }
+      }
+      responses: {
+        key: "400";
+        value: {
+          description: "contoh response, 400 ketika ..."
+        }
+      }
+    };
+  }
+  rpc CreateUser(UserRequest) returns (UserResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/user"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Endpoint untuk create user",
+      description: "Masukkan data yang sesuai",
       responses: {
         key: "200";
         value: {
