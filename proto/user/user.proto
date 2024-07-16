@@ -38,6 +38,14 @@ message UserRequest {
   string updated_at = 9 [json_name = "updated_at"];
 }
 
+message UserSearchRequest {
+  string name = 1 [json_name = "name"];
+  string email = 2 [json_name = "email"];
+  string role = 3 [json_name = "role"];
+  int64 page = 4 [json_name = "page"];
+  int64 size = 5 [json_name = "size"];
+}
+
 message UserData { 
   string id = 1 [json_name = "id"];
   string name = 2 [json_name = "name"];
@@ -52,7 +60,20 @@ message UserResponse {
   UserData data = 1 [json_name = "data"];
 }
 
+message Paging {
+  int64 page = 1 [json_name = "page"];
+  int64 size = 2 [json_name = "size"];
+  int64 total_item = 3 [json_name = "total_item"];
+  int64 total_page = 4 [json_name = "total_page"];
+}
+
+message PaginatedUserResponse {
+  repeated UserData data = 1 [json_name = "data"];
+  Paging paging = 2 [json_name = "paging"];
+}
+
 service UserService {
+  
   rpc GetUser(UserRequest) returns (UserResponse) {
     option (google.api.http) = {
       get: "/api/v1/user/{id}"
@@ -74,6 +95,13 @@ service UserService {
       }
     };
   }
+
+  rpc SearchUser(UserSearchRequest) returns (PaginatedUserResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/user/search"
+    };
+  }
+
   rpc CreateUser(UserRequest) returns (UserResponse) {
     option (google.api.http) = {
       post: "/api/v1/user"

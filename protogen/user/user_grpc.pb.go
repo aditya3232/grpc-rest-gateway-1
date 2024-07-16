@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion8
 
 const (
 	UserService_GetUser_FullMethodName    = "/user.UserService/GetUser"
+	UserService_SearchUser_FullMethodName = "/user.UserService/SearchUser"
 	UserService_CreateUser_FullMethodName = "/user.UserService/CreateUser"
 )
 
@@ -28,6 +29,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UserServiceClient interface {
 	GetUser(ctx context.Context, in *UserRequest, opts ...grpc.CallOption) (*UserResponse, error)
+	SearchUser(ctx context.Context, in *UserSearchRequest, opts ...grpc.CallOption) (*PaginatedUserResponse, error)
 	CreateUser(ctx context.Context, in *UserRequest, opts ...grpc.CallOption) (*UserResponse, error)
 }
 
@@ -49,6 +51,16 @@ func (c *userServiceClient) GetUser(ctx context.Context, in *UserRequest, opts .
 	return out, nil
 }
 
+func (c *userServiceClient) SearchUser(ctx context.Context, in *UserSearchRequest, opts ...grpc.CallOption) (*PaginatedUserResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(PaginatedUserResponse)
+	err := c.cc.Invoke(ctx, UserService_SearchUser_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *userServiceClient) CreateUser(ctx context.Context, in *UserRequest, opts ...grpc.CallOption) (*UserResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(UserResponse)
@@ -64,6 +76,7 @@ func (c *userServiceClient) CreateUser(ctx context.Context, in *UserRequest, opt
 // for forward compatibility
 type UserServiceServer interface {
 	GetUser(context.Context, *UserRequest) (*UserResponse, error)
+	SearchUser(context.Context, *UserSearchRequest) (*PaginatedUserResponse, error)
 	CreateUser(context.Context, *UserRequest) (*UserResponse, error)
 	mustEmbedUnimplementedUserServiceServer()
 }
@@ -74,6 +87,9 @@ type UnimplementedUserServiceServer struct {
 
 func (UnimplementedUserServiceServer) GetUser(context.Context, *UserRequest) (*UserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUser not implemented")
+}
+func (UnimplementedUserServiceServer) SearchUser(context.Context, *UserSearchRequest) (*PaginatedUserResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SearchUser not implemented")
 }
 func (UnimplementedUserServiceServer) CreateUser(context.Context, *UserRequest) (*UserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateUser not implemented")
@@ -109,6 +125,24 @@ func _UserService_GetUser_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserService_SearchUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserSearchRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).SearchUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserService_SearchUser_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).SearchUser(ctx, req.(*UserSearchRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _UserService_CreateUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UserRequest)
 	if err := dec(in); err != nil {
@@ -137,6 +171,10 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetUser",
 			Handler:    _UserService_GetUser_Handler,
+		},
+		{
+			MethodName: "SearchUser",
+			Handler:    _UserService_SearchUser_Handler,
 		},
 		{
 			MethodName: "CreateUser",
