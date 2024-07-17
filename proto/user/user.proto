@@ -19,15 +19,7 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 };
 
 message UserRequest { 
-  string id = 1 
-  [
-    json_name = "id",
-    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
-      description: "uuid",
-      format: "string",
-      example: "c7a5b0b8-6c5e-4d62-b9e3-f7b6d0628f6a",
-    }
-  ];
+  string id = 1 [json_name = "id"];
   string name = 2 [json_name = "name"];
   string occupation = 3 [json_name = "occupation"];
   string email = 4 [json_name = "email"];
@@ -82,22 +74,6 @@ service UserService {
     option (google.api.http) = {
       get: "/api/v1/user/{id}"
     };
-    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-      summary: "Endpoint untuk get user bedasarkan id",
-      description: "Masukkan uuid yang valid",
-      responses: {
-        key: "200";
-        value: {
-          description: "contoh response, 200 ketika ..."
-        }
-      }
-      responses: {
-        key: "400";
-        value: {
-          description: "contoh response, 400 ketika ..."
-        }
-      }
-    };
   }
 
   rpc SearchUser(UserSearchRequest) returns (PaginatedUserResponse) {
@@ -111,22 +87,6 @@ service UserService {
       post: "/api/v1/user"
       body: "*"
     };
-    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-      summary: "Endpoint untuk create user",
-      description: "Masukkan data yang sesuai",
-      responses: {
-        key: "200";
-        value: {
-          description: "contoh response, 200 ketika ..."
-        }
-      }
-      responses: {
-        key: "400";
-        value: {
-          description: "contoh response, 400 ketika ..."
-        }
-      }
-    };
   }
 
   rpc UpdateUser(UserRequest) returns (UserResponse) {
@@ -134,43 +94,11 @@ service UserService {
       put: "/api/v1/user/{id}"
       body: "*"
     };
-    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-      summary: "Endpoint untuk update user",
-      description: "Masukkan data yang sesuai",
-      responses: {
-        key: "200";
-        value: {
-          description: "contoh response, 200 ketika ..."
-        }
-      }
-      responses: {
-        key: "400";
-        value: {
-          description: "contoh response, 400 ketika ..."
-        }
-      }
-    };
   }
 
   rpc DeleteUser(UserRequest) returns (DeleteUserResponse) {
     option (google.api.http) = {
       delete: "/api/v1/user/{id}"
-    };
-    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-      summary: "Endpoint untuk delete user",
-      description: "Masukkan data yang sesuai",
-      responses: {
-        key: "200";
-        value: {
-          description: "contoh response, 200 ketika ..."
-        }
-      }
-      responses: {
-        key: "400";
-        value: {
-          description: "contoh response, 400 ketika ..."
-        }
-      }
     };
   }
 }

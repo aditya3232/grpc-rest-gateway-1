@@ -1,0 +1,307 @@
+swagger: "2.0"
+info:
+  title: rest api - user
+  version: 1.0.0
+tags:
+  - name: UserService
+host: localhost:8081
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /api/v1/user:
+    post:
+      operationId: UserService_CreateUser
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/userUserResponse'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/userUserRequest'
+      tags:
+        - UserService
+  /api/v1/user/search:
+    get:
+      operationId: UserService_SearchUser
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/userPaginatedUserResponse'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: name
+          in: query
+          required: false
+          type: string
+        - name: email
+          in: query
+          required: false
+          type: string
+        - name: role
+          in: query
+          required: false
+          type: string
+        - name: page
+          in: query
+          required: false
+          type: string
+          format: int64
+        - name: size
+          in: query
+          required: false
+          type: string
+          format: int64
+      tags:
+        - UserService
+  /api/v1/user/{id}:
+    get:
+      operationId: UserService_GetUser
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/userUserResponse'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+        - name: name
+          in: query
+          required: false
+          type: string
+        - name: occupation
+          in: query
+          required: false
+          type: string
+        - name: email
+          in: query
+          required: false
+          type: string
+        - name: password_hash
+          in: query
+          required: false
+          type: string
+        - name: avatar_file_name
+          in: query
+          required: false
+          type: string
+        - name: role
+          in: query
+          required: false
+          type: string
+        - name: created_at
+          in: query
+          required: false
+          type: string
+        - name: updated_at
+          in: query
+          required: false
+          type: string
+      tags:
+        - UserService
+    delete:
+      operationId: UserService_DeleteUser
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/userDeleteUserResponse'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+        - name: name
+          in: query
+          required: false
+          type: string
+        - name: occupation
+          in: query
+          required: false
+          type: string
+        - name: email
+          in: query
+          required: false
+          type: string
+        - name: password_hash
+          in: query
+          required: false
+          type: string
+        - name: avatar_file_name
+          in: query
+          required: false
+          type: string
+        - name: role
+          in: query
+          required: false
+          type: string
+        - name: created_at
+          in: query
+          required: false
+          type: string
+        - name: updated_at
+          in: query
+          required: false
+          type: string
+      tags:
+        - UserService
+    put:
+      operationId: UserService_UpdateUser
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/userUserResponse'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/UserServiceUpdateUserBody'
+      tags:
+        - UserService
+definitions:
+  UserServiceUpdateUserBody:
+    type: object
+    properties:
+      name:
+        type: string
+      occupation:
+        type: string
+      email:
+        type: string
+      password_hash:
+        type: string
+      avatar_file_name:
+        type: string
+      role:
+        type: string
+      created_at:
+        type: string
+      updated_at:
+        type: string
+  protobufAny:
+    type: object
+    properties:
+      '@type':
+        type: string
+    additionalProperties: {}
+  rpcStatus:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+      details:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/protobufAny'
+  userDeleteUserResponse:
+    type: object
+    properties:
+      status:
+        type: string
+  userPaginatedUserResponse:
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/userUserData'
+      paging:
+        $ref: '#/definitions/userPaging'
+  userPaging:
+    type: object
+    properties:
+      page:
+        type: string
+        format: int64
+      size:
+        type: string
+        format: int64
+      total_item:
+        type: string
+        format: int64
+      total_page:
+        type: string
+        format: int64
+  userUserData:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      occupation:
+        type: string
+      email:
+        type: string
+      role:
+        type: string
+      created_at:
+        type: string
+      updated_at:
+        type: string
+  userUserRequest:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      occupation:
+        type: string
+      email:
+        type: string
+      password_hash:
+        type: string
+      avatar_file_name:
+        type: string
+      role:
+        type: string
+      created_at:
+        type: string
+      updated_at:
+        type: string
+  userUserResponse:
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/userUserData'
