@@ -1,0 +1,11 @@
+{
+  "app": {
+    "name": "grpc-rest-gateway-1"
+  },
+  "log": {
+    "level": 6
+  },
+  "grpc": {
+    "port": 8081
+  }
+}

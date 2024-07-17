@@ -10,6 +10,7 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/grpclog"
 
+	"grpc-rest-gateway-1/internal/config"
 	usergw "grpc-rest-gateway-1/protogen/gateway/go/proto/user"
 )
 
@@ -40,7 +41,12 @@ func run() error {
 func main() {
 	flag.Parse()
 
+	viperConfig := config.NewViper()
+	logger := config.NewLogger(viperConfig)
+	logger.Info("grpc gateway running")
+
 	if err := run(); err != nil {
 		grpclog.Fatal(err)
 	}
+
 }
