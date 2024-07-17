@@ -124,4 +124,28 @@ service UserService {
       }
     };
   }
+
+  rpc UpdateUser(UserRequest) returns (UserResponse) {
+    option (google.api.http) = {
+      put: "/api/v1/user/{id}"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Endpoint untuk update user",
+      description: "Masukkan data yang sesuai",
+      responses: {
+        key: "200";
+        value: {
+          description: "contoh response, 200 ketika ..."
+        }
+      }
+      responses: {
+        key: "400";
+        value: {
+          description: "contoh response, 400 ketika ..."
+        }
+      }
+    };
+  }
+  
 }
