@@ -72,6 +72,10 @@ message PaginatedUserResponse {
   Paging paging = 2 [json_name = "paging"];
 }
 
+message DeleteUserResponse {
+  string status = 1 [json_name = "status"];
+}
+
 service UserService {
   
   rpc GetUser(UserRequest) returns (UserResponse) {
@@ -147,5 +151,26 @@ service UserService {
       }
     };
   }
-  
+
+  rpc DeleteUser(UserRequest) returns (DeleteUserResponse) {
+    option (google.api.http) = {
+      delete: "/api/v1/user/{id}"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Endpoint untuk delete user",
+      description: "Masukkan data yang sesuai",
+      responses: {
+        key: "200";
+        value: {
+          description: "contoh response, 200 ketika ..."
+        }
+      }
+      responses: {
+        key: "400";
+        value: {
+          description: "contoh response, 400 ketika ..."
+        }
+      }
+    };
+  }
 }
